@@ -34,11 +34,11 @@ jobs:
     strategy:
       matrix:
         VERSION: [23.05]
-        SET: [docker, non-docker]
+        SET: [native, docker]
 
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     - name: Initialization environment
       env:
@@ -46,7 +46,7 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d
         sudo apt update
-        sudo apt install -y curl
+        sudo apt install -y ca-certificates curl git lsb-release
         curl -fsSL https://github.com/friendlyarm/build-env-on-ubuntu-bionic/raw/refs/heads/master/install.sh -o install.sh
         sed -i -e 's/^apt-get -y install openjdk-8-jdk/# apt-get -y install openjdk-8-jdk/g' install.sh
         sed -i -e 's/^\[ -d fa-toolchain \]/# [ -d fa-toolchain ]/g' install.sh
@@ -145,11 +145,11 @@ jobs:
       matrix:
         VERSION: [23.05]
         CPU: [rk3399, rk3566, rk3588]
-        SET: [docker, non-docker]
+        SET: [native, docker]
 
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     - name: Initialization environment
       env:
@@ -157,7 +157,7 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d
         sudo apt update
-        sudo apt install -y curl
+        sudo apt install -y ca-certificates curl git lsb-release
         curl -fsSL https://github.com/friendlyarm/build-env-on-ubuntu-bionic/raw/refs/heads/master/install.sh -o install.sh
         sed -i -e 's/^apt-get -y install openjdk-8-jdk/# apt-get -y install openjdk-8-jdk/g' install.sh
         sed -i -e 's/^\[ -d fa-toolchain \]/# [ -d fa-toolchain ]/g' install.sh
@@ -191,19 +191,19 @@ jobs:
         repo sync -c scripts/sd-fuse  --no-clone-bundle
         repo sync -c toolchain  --no-clone-bundle
 
-    - name: Download friendlywrt rootfs (non-docker)
-      if: matrix.SET == 'non-docker'
-      uses: robinraju/release-downloader@v1.6
+    - name: Download friendlywrt rootfs (native)
+      if: matrix.SET == 'native'
+      uses: robinraju/release-downloader@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repository: ${{ github.repository }}
         tag: ${{ needs.prepare_release.outputs.release_tag }}
-        fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}.tgz"
+        fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}-native.tgz"
 
     - name: Download friendlywrt rootfs (docker)
       if: matrix.SET == 'docker'
-      uses: robinraju/release-downloader@v1.6
+      uses: robinraju/release-downloader@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -216,23 +216,14 @@ jobs:
       run: |
         cd project
         case ${{ matrix.CPU }} in
-        rk3328)
-          MODEL=R2S-R2C-Series
-          ;;
-        rk3528)
-          MODEL=NanoPi-Zero2
-          ;;
         rk3399)
           MODEL=R4S-Series
-          ;;
-        rk3568)
-          MODEL=R5S-R5C-Series
           ;;
         rk3566)
           MODEL=R3S-Series
           ;;
         rk3588)
-          MODEL=T6-R6S-R6C-M6-Series
+          MODEL=R6C-R6S-Series
           ;;
         *)
           echo "unknow cpu"
