@@ -141,7 +141,7 @@ jobs:
     strategy:
       matrix:
         VERSION: [23.05]
-        CPU: [rk3399, rk3566, rk3588]
+        CPU: [rk3399, rk3566, rk3568, rk3588]
         SET: [native, docker]
 
     steps:
@@ -214,13 +214,16 @@ jobs:
         cd project
         case ${{ matrix.CPU }} in
         rk3566)
-          MODEL=R3C-R3S-Series
+          MODEL=NanoPi-R3x-Series
           ;;
         rk3399)
-          MODEL=R4C-R4S-Series
+          MODEL=NanoPi-R4x-Series
+          ;;
+        rk3568)
+          MODEL=NanoPi-R5x-Series
           ;;
         rk3588)
-          MODEL=R6C-R6S-Series
+          MODEL=NanoPi-R6x-Series
           ;;
         *)
           echo "unknow cpu"
