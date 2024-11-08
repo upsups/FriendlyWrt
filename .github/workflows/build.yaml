@@ -1,9 +1,6 @@
 name: build
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
   prepare_release:
@@ -209,7 +206,7 @@ jobs:
       with:
         repository: ${{ github.repository }}
         tag: ${{ needs.prepare_release.outputs.release_tag }}
-        fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}-${{ matrix.SET }}.tgz"
+        fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}-docker.tgz"
 
     - name: Prepare config
       id: config
