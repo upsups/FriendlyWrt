@@ -141,7 +141,7 @@ jobs:
     strategy:
       matrix:
         VERSION: [23.05]
-        CPU: [rk3328, rk3399, rk3566, rk3568, rk3588]
+        CPU: [rk3399, rk3566, rk3588]
         SET: [native, docker]
 
     steps:
@@ -213,17 +213,11 @@ jobs:
       run: |
         cd project
         case ${{ matrix.CPU }} in
-        rk3328)
-          MODEL=R2C-R2S-Series
-          ;;
         rk3566)
           MODEL=R3C-R3S-Series
           ;;
         rk3399)
           MODEL=R4C-R4S-Series
-          ;;
-        rk3568)
-          MODEL=R5C-R5S-Series
           ;;
         rk3588)
           MODEL=R6C-R6S-Series
