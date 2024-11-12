@@ -214,16 +214,16 @@ jobs:
         cd project
         case ${{ matrix.CPU }} in
         rk3566)
-          MODEL=NanoPi-R3x-Series
+          MODEL=R3x-Series
           ;;
         rk3399)
-          MODEL=NanoPi-R4x-Series
+          MODEL=R4x-Series
           ;;
         rk3568)
-          MODEL=NanoPi-R5x-Series
+          MODEL=R5x-Series
           ;;
         rk3588)
-          MODEL=NanoPi-R6x-Series
+          MODEL=R6x-Series
           ;;
         *)
           echo "unknow cpu"
